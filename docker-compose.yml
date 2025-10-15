@@ -1,0 +1,68 @@
+version: '3.9'
+
+services:
+  # ---------------- Backend Laravel ----------------
+  app:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: travel-manager-app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./backend:/var/www
+    ports:
+      - "8000:8000"   # Laravel serve na porta 8000
+    depends_on:
+      - db
+      - redis
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=travel_manager
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+      - REDIS_HOST=redis
+
+  # ---------------- Database MySQL ----------------
+  db:
+    image: mysql:8.0
+    container_name: travel-manager-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: travel_manager
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  # ---------------- Redis ----------------
+  redis:
+    image: redis:7.0
+    container_name: travel-manager-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
+  # ---------------- Frontend Vue ----------------
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: travel-manager-frontend
+    restart: unless-stopped
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "5173:5173"
+    command: npm run dev
+    depends_on:
+      - app
+
+# ---------------- Volumes persistentes ----------------
+volumes:
+  db_data:
