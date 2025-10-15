@@ -1,5 +1,2 @@
-# Travel Manager
-
-Aplicação Full Stack para gerenciamento de pedidos de viagem corporativa.
-
-## Estrutura do projeto
+# travel-manager
+Aplicação que gerencia pedidos de viagem corporativa.
