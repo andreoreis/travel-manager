@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Enums\TravelRequestStatus;
 use App\Http\Requests\StoreTravelRequest;
 use App\Models\TravelRequest;
+use App\Notifications\TravelRequestStatusChanged;
 use App\Repositories\TravelRequestRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
@@ -81,8 +82,20 @@ class TravelRequestService
             'status' => ['required', Rule::in(TravelRequestStatus::values())],
         ]);
 
-        $travelRequest->status = $request->input('status');
+        // Captura o status anterior
+        $oldStatus = $travelRequest->status->value;
+
+        // Atualiza o status
+        $newStatus = $request->input('status');
+        $travelRequest->status = $newStatus;
         $travelRequest->save();
+
+        // Envia notificação
+        if ($travelRequest->user) {
+            $travelRequest->user->notify(
+                new TravelRequestStatusChanged($travelRequest, $oldStatus, $newStatus)
+            );
+        }
 
         return response()->json($travelRequest);
     }
