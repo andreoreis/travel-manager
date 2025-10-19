@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Enums\TravelRequestStatus;
 use App\Http\Requests\StoreTravelRequest;
 use App\Models\TravelRequest;
+use App\Repositories\TravelRequestRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -14,9 +15,11 @@ use Illuminate\Validation\Rule;
 class TravelRequestService
 {
     private $user_repository;
+    private $travel_request_repository;
 
-    public function __construct(UserRepository $user_repository,) {
+    public function __construct(UserRepository $user_repository, TravelRequestRepository $travel_request_repository) {
         $this->user_repository = $user_repository;
+        $this->travel_request_repository = $travel_request_repository;
     }
 
     /**
@@ -43,7 +46,7 @@ class TravelRequestService
     {
         $data = $request->validated();
 
-        $travelRequest = TravelRequest::create($data);
+        $travelRequest = $this->travel_request_repository::create($data);
 
         return response()->json($travelRequest, 201);
     }
@@ -54,9 +57,9 @@ class TravelRequestService
     public function update(StoreTravelRequest $request, TravelRequest $travelRequest)
     {
         $data = $request->validated();
-        $travelRequest->update($data);
+        $travelUpdated = $this->travel_request_repository::update($travelRequest->id, $data);
 
-        return response()->json($travelRequest);
+        return response()->json($travelUpdated);
     }
 
     /**
@@ -64,7 +67,7 @@ class TravelRequestService
      */
     public function destroy(TravelRequest $travelRequest)
     {
-        $travelRequest->delete();
+        $this->travel_request_repository::delete($travelRequest->id);
         return response()->noContent();
     }
 
