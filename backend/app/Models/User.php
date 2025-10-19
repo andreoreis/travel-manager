@@ -34,6 +34,10 @@ class User extends Authenticatable implements JWTSubject
         'remember_token',
     ];
 
+    protected $casts = [
+        'is_admin' => 'boolean',
+    ];
+
     /**
      * Get the attributes that should be cast.
      *
