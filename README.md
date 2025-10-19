@@ -119,3 +119,10 @@ Redis (para cache ou filas)
 Host: 127.0.0.1
 
 Porta: 6379
+
+### 12. Rodando a Fila
+
+Execute:
+
+cd travel-manager/backend
+docker compose exec app php artisan queue:work --tries=3 --sleep=3 --timeout=90
