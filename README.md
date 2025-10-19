@@ -75,21 +75,22 @@ docker compose ps
 Exemplo de saída:
 
 NAME                      IMAGE                     COMMAND                  SERVICE    STATUS         PORTS
-travel-manager-app        travel-manager-app        "docker-php-entrypoi…"   app        Up             0.0.0.0:8000->8000/tcp, 9000/tcp
+travel-manager-app        travel-manager-app        "docker-php-entrypoi…"   app        Up             9000/tcp
 travel-manager-db         mysql:8.0                 "docker-entrypoint.s…"   db         Up             0.0.0.0:3306->3306/tcp, 33060/tcp
 travel-manager-frontend   travel-manager-frontend   "docker-entrypoint.s…"   frontend   Up             0.0.0.0:5173->5173/tcp
-travel-manager-redis      redis:7.0                 "docker-entrypoint.s…"   redis      Up             0.0.0.0
+travel-manager-redis      redis:7.0                 "docker-entrypoint.s…"   redis      Up             0.0.0.0:6379->6379/tcp
+travel-manager-web        nginx:alpine              "/docker-entrypoint.…"   web        Up             0.0.0.0:8080->80/tcp
 
 
 ### 11. Identificando e acessando os serviços
 
 Backend Laravel (API)
 
-Porta exposta no host: 8000
+Porta exposta no host: 8080
 
 Acesse pelo navegador ou via API client:
 
-http://localhost:8000
+http://localhost:8080
 
 
 A porta 9000 mostrada é interna do PHP-FPM e não é usada externamente.
