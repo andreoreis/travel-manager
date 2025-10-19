@@ -28,8 +28,9 @@ abstract class AbstractRepository implements RepositoryInterface
         return self::loadModel()::query()->where(['id' => $id])->delete();
     }
 
-    public static function update(int $id, array $data = []):int{
-        return self::loadModel()::query()->where(['id' => $id])->update($data);
+    public static function update(int $id, array $data = []):Model{
+        self::loadModel()::query()->where(['id' => $id])->update($data);
+        return self::find($id);
     }
 
     public static function loadModel():Model{

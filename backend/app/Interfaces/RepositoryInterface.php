@@ -13,6 +13,6 @@ interface RepositoryInterface
     public static function create(array $data):Model|null;
     public static function find(int $id):Model|null;
     public static function delete(int $id):bool;
-    public static function update(int $id, array $data):int;
+    public static function update(int $id, array $data):Model;
     public static function loadModel():Model;
 }
