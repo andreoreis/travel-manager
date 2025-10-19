@@ -52,4 +52,10 @@ class TravelRequestController
     {
         return $this->service->changeStatus($request, $travelRequest);
     }
+
+    public function cancel(TravelRequest $travelRequest)
+    {
+        $this->authorize('cancel', $travelRequest);
+        return $this->service->cancel($travelRequest);
+    }
 }

@@ -18,4 +18,16 @@ class TravelRequestPolicy
     {
         return $travelRequest->user_id === $user->id;
     }
+
+    /**
+     * Verifica se o usuário pode cancelar o pedido.
+     *
+     * @param User $user
+     * @param TravelRequest $travelRequest
+     * @return bool
+     */
+    public function cancel(User $user, TravelRequest $travelRequest)
+    {
+        return $user->is_admin || $travelRequest->user_id === $user->id;
+    }
 }

@@ -86,4 +86,22 @@ class TravelRequestService
 
         return response()->json($travelRequest);
     }
+
+    /**
+     * Cancela o status de um pedido de viagem
+     */
+    public function cancel(TravelRequest $travelRequest)
+    {
+        // Só permite cancelar se não estiver aprovado
+        if ($travelRequest->status === 'aprovado') {
+            return response()->json([
+                'message' => 'Não é possível cancelar um pedido aprovado.'
+            ], Response::HTTP_FORBIDDEN);
+        }
+
+        $travelRequest->status = 'cancelado';
+        $travelRequest->save();
+
+        return response()->json($travelRequest);
+    }
 }
