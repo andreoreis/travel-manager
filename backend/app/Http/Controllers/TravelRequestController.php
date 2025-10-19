@@ -8,9 +8,12 @@ use App\Models\TravelRequest;
 use App\Repositories\TravelRequestRepository;
 use App\Services\TravelRequestService;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class TravelRequestController
 {
+    use AuthorizesRequests;
+
     private $service;
     private $repository;
 
@@ -29,10 +32,10 @@ class TravelRequestController
         return $this->service->saveTravel($request);
     }
 
-    public function show(int $id)
+    public function show(TravelRequest $travelRequest)
     {
-        $travel = $this->repository::find($id);
-        return new BaseResource($travel);
+        $this->authorize('view', $travelRequest);
+        return new BaseResource($travelRequest);
     }
 
     public function update(StoreTravelRequest $request, TravelRequest $travelRequest)
