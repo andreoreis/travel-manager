@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
 
-class AuthController extends Controller
+class AuthController
 {
     private $service;
 

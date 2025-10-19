@@ -9,7 +9,7 @@ use App\Repositories\TravelRequestRepository;
 use App\Services\TravelRequestService;
 use Illuminate\Http\Request;
 
-class TravelRequestController extends Controller
+class TravelRequestController
 {
     private $service;
     private $repository;
