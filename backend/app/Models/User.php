@@ -62,9 +62,8 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    // Relacionamentos (exemplo)
     public function travelRequests()
     {
-        // return $this->hasMany(TravelRequest::class);
+        return $this->hasMany(TravelRequest::class);
     }
 }
