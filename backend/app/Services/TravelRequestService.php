@@ -11,6 +11,7 @@ use App\Repositories\TravelRequestRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Symfony\Component\HttpFoundation\Response;
 
 class TravelRequestService
 {
@@ -48,7 +49,7 @@ class TravelRequestService
 
         $travelRequest = $this->travel_request_repository::create($data);
 
-        return response()->json($travelRequest, 201);
+        return response()->json($travelRequest, Response::HTTP_CREATED);
     }
 
     /**
