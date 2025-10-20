@@ -159,3 +159,10 @@ para a porta correta:
 Depois disso, limpe o cache de configuração do Laravel:
 
 php artisan config:clear
+
+### 14. Executar os testes
+
+Execute:
+
+cd travel-manager/backend
+php artisan test
