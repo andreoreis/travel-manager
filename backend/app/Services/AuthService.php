@@ -7,6 +7,7 @@ namespace App\Services;
 use Illuminate\Http\Request;
 use App\Repositories\UserRepository;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthService {
 
@@ -25,6 +26,7 @@ class AuthService {
             'password' => 'required|string|min:6|confirmed',
         ]);
 
+        $data['password'] = Hash::make($data['password']);
         $user = $this->user_repository::create($data);
 
         $token =  JWTAuth::fromUser($user);
