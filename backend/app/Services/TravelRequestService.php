@@ -36,7 +36,7 @@ class TravelRequestService
 
         $perPage = (int) $request->input('per_page', 15);
 
-        $users = $this->user_repository->queryWithFilters($filters)->paginate($perPage);
+        $users = $this->travel_request_repository->queryWithFilters($filters)->paginate($perPage);
 
         return response()->json($users);
     }
@@ -89,6 +89,8 @@ class TravelRequestService
         $newStatus = $request->input('status');
         $travelRequest->status = $newStatus;
         $travelRequest->save();
+
+
 
         // Envia notificação
         if ($travelRequest->user) {
