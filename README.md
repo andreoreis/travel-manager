@@ -77,7 +77,7 @@ Exemplo de saída:
 NAME                      IMAGE                     COMMAND                  SERVICE    STATUS         PORTS
 travel-manager-app        travel-manager-app        "docker-php-entrypoi…"   app        Up             9000/tcp
 travel-manager-db         mysql:8.0                 "docker-entrypoint.s…"   db         Up             0.0.0.0:3306->3306/tcp, 33060/tcp
-travel-manager-frontend   travel-manager-frontend   "docker-entrypoint.s…"   frontend   Up             0.0.0.0:5173->5173/tcp
+travel-manager-frontend   travel-manager-frontend   "docker-entrypoint.s…"   frontend   Up             0.0.0.0:5174->5174/tcp
 travel-manager-redis      redis:7.0                 "docker-entrypoint.s…"   redis      Up             0.0.0.0:6379->6379/tcp
 travel-manager-web        nginx:alpine              "/docker-entrypoint.…"   web        Up             0.0.0.0:8080->80/tcp
 
@@ -97,11 +97,11 @@ A porta 9000 mostrada é interna do PHP-FPM e não é usada externamente.
 
 Frontend Vue
 
-Porta exposta no host: 5173
+Porta exposta no host: 5174
 
 Acesse pelo navegador:
 
-http://localhost:5173
+http://localhost:5174
 
 
 MySQL (para ferramentas externas como DBeaver)
@@ -126,3 +126,36 @@ Execute:
 
 cd travel-manager/backend
 docker compose exec app php artisan queue:work --tries=3 --sleep=3 --timeout=90
+
+### 13. Configuração de CORS
+
+Se ao consumir a API você receber erros de CORS (Cross-Origin Resource Sharing), verifique se a porta do frontend está correta na configuração de CORS do Laravel.
+
+O arquivo de configuração é:
+
+// config/cors.php
+return [
+    'paths' => ['api/*'],
+    'allowed_methods' => ['*'],
+    'allowed_origins' => ['http://localhost:5174'], // frontend Vite
+    'allowed_origins_patterns' => [],
+    'allowed_headers' => ['Content-Type', 'X-Requested-With', 'Authorization'],
+    'exposed_headers' => [],
+    'max_age' => 0,
+    'supports_credentials' => true,
+];
+
+
+Se você estiver rodando o frontend em outra porta (por exemplo, http://localhost:5173), altere a linha:
+
+'allowed_origins' => ['http://localhost:5174'],
+
+
+para a porta correta:
+
+'allowed_origins' => ['http://localhost:5173'],
+
+
+Depois disso, limpe o cache de configuração do Laravel:
+
+php artisan config:clear
