@@ -4,11 +4,14 @@ namespace App\Models;
 
 use App\Enums\TravelRequestStatus;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TravelRequest extends Model
 {
     protected $table = 'travel_requests';
+
+     use HasFactory;
 
     protected $fillable = [
         'user_id',

@@ -17,7 +17,6 @@ class StoreTravelRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id'        => ['required','integer','exists:users,id'],
             'requester_name' => ['required','string','max:255'],
             'destination'    => ['required','string','max:255'],
             'start_date'     => ['required','date','before_or_equal:end_date'],
