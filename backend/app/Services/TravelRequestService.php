@@ -47,6 +47,7 @@ class TravelRequestService
     public function saveTravel(StoreTravelRequest $request)
     {
         $data = $request->validated();
+        $data['user_id'] = $request->user()->id;
 
         $travelRequest = $this->travel_request_repository::create($data);
 
