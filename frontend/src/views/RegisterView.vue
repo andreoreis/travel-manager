@@ -1,61 +1,71 @@
 <template>
-  <div class="login-container">
-    <h1>Login</h1>
-    <form @submit.prevent="handleLogin">
+  <div class="register-container">
+    <h1>Cadastro</h1>
+    <form @submit.prevent="handleRegister">
+      <input type="text" v-model="name" placeholder="Nome" required />
       <input type="email" v-model="email" placeholder="Email" required />
       <input type="password" v-model="password" placeholder="Senha" required />
+      <input type="password" v-model="passwordConfirmation" placeholder="Confirme a senha" required />
       <button type="submit" :disabled="loading">
-        {{ loading ? 'Entrando...' : 'Entrar' }}
+        {{ loading ? 'Cadastrando...' : 'Cadastrar' }}
       </button>
       <p v-if="error" class="error">{{ error }}</p>
+      <p v-if="success" class="success">{{ success }}</p>
     </form>
     <p class="redirect">
-      Não tem conta?
-      <a @click.prevent="goToRegister" href="#">Cadastre-se</a>
+      Já tem conta?
+      <a @click.prevent="goToLogin" href="#">Faça login</a>
     </p>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useAuthStore } from '../stores/auth'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 
+const name = ref('')
 const email = ref('')
 const password = ref('')
+const passwordConfirmation = ref('')
 const loading = ref(false)
 const error = ref('')
+const success = ref('')
 
-const auth = useAuthStore()
 const router = useRouter()
 
-const handleLogin = async () => {
+const handleRegister = async () => {
   loading.value = true
   error.value = ''
+  success.value = ''
   try {
-    await auth.login(email.value, password.value)
-    window.location.href = '/dashboard' // redireciona após login
+    await axios.post('http://localhost:8080/api/auth/register', {
+      name: name.value,
+      email: email.value,
+      password: password.value,
+      password_confirmation: passwordConfirmation.value,
+    })
+    success.value = 'Cadastro realizado com sucesso! Você já pode fazer login.'
   } catch (err) {
     if (axios.isAxiosError(err)) {
-      error.value = err.response?.data?.message || 'Falha ao autenticar'
+      error.value = err.response?.data?.message || 'Falha ao cadastrar'
     } else if (err instanceof Error) {
       error.value = err.message
     } else {
-      error.value = 'Falha ao autenticar'
+      error.value = 'Falha ao cadastrar'
     }
   } finally {
     loading.value = false
   }
 }
 
-const goToRegister = () => {
-  router.push('/register') // redireciona para a tela de cadastro
+const goToLogin = () => {
+  router.push('/') // volta para tela de login
 }
 </script>
 
 <style scoped>
-.login-container {
+.register-container {
   max-width: 400px;
   margin: 5vh auto;
   padding: 2.5rem 2rem;
@@ -68,20 +78,20 @@ const goToRegister = () => {
   font-family: 'Inter', sans-serif;
 }
 
-.login-container h1 {
+.register-container h1 {
   text-align: center;
   color: #333;
   font-size: 2rem;
   font-weight: 600;
 }
 
-.login-container form {
+.register-container form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.login-container input {
+.register-container input {
   padding: 0.75rem 1rem;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -89,13 +99,13 @@ const goToRegister = () => {
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.login-container input:focus {
+.register-container input:focus {
   outline: none;
   border-color: #4f46e5;
   box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
 }
 
-.login-container button {
+.register-container button {
   padding: 0.75rem 1rem;
   background-color: #4f46e5;
   color: #fff;
@@ -107,12 +117,12 @@ const goToRegister = () => {
   transition: background-color 0.2s, transform 0.1s;
 }
 
-.login-container button:disabled {
+.register-container button:disabled {
   background-color: #a5b4fc;
   cursor: not-allowed;
 }
 
-.login-container button:hover:not(:disabled) {
+.register-container button:hover:not(:disabled) {
   background-color: #4338ca;
   transform: translateY(-1px);
 }
