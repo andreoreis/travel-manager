@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Exceptions\ApiException;
 use Illuminate\Http\Request;
 use App\Repositories\UserRepository;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Hash;
+use Symfony\Component\HttpFoundation\Response;
 
 class AuthService {
 
@@ -48,7 +50,7 @@ class AuthService {
         ]);
 
         if (!$token = JWTAuth::attempt($credentials)) {
-            return response()->json(['message' => 'Credenciais inválidas'], 401);
+            throw new ApiException('Não é possível cancelar um pedido aprovado.', Response::HTTP_UNAUTHORIZED);
         }
 
         return $this->respondWithToken($token);
