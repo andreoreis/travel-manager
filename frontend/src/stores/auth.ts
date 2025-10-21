@@ -31,7 +31,6 @@ export const useAuthStore = defineStore('auth', {
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`
     },
 
-    // Chame isso no main.ts ou App.vue para garantir que o header seja configurado após reload
     initializeToken() {
       if (this.token) {
         api.defaults.headers.common['Authorization'] = `Bearer ${this.token}`
